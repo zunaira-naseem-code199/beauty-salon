@@ -31,6 +31,15 @@ app.use('/api', limiter(15 * 60 * 1000, 600, 'Too many requests. Please slow dow
 app.use('/api/auth/login', limiter(15 * 60 * 1000, 10, 'Too many login attempts. Try again in 15 minutes.'))
 app.post('/api/appointments', limiter(60 * 60 * 1000, 8, 'Too many booking requests. Please call us to book.'))
 
+app.get('/', (req, res) =>
+  res.json({
+    name: 'Beauty Grace Parlor API',
+    status: 'running',
+    health: '/api/health',
+    services: '/api/services',
+  })
+)
+
 app.get('/api/health', (req, res) => res.json({ ok: true }))
 app.use('/api/auth', authRoutes)
 app.use('/api/services', serviceRoutes)

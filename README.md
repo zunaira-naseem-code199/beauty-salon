@@ -1,60 +1,80 @@
-# Beauty Grace Parlor (MERN)
+# 💄 Beauty Grace Parlor
 
-Luxury beauty parlour website with online booking and an admin dashboard.
+A full-stack MERN website for a beauty parlour: a luxury-style landing page, online booking with live time slots, and an admin dashboard to manage bookings and content.
 
-- **client/**: React + Vite + Tailwind CSS (installed, not CDN) + Framer Motion + React Router
-- **server/**: Node.js + Express + MongoDB (Mongoose) + JWT admin login
+> Sample project. Contact details, prices, reviews and photos are placeholder data.
 
-## Features
-**Website:** hero, services, about, gallery with lightbox, reviews, booking form with live free time slots, contact with map and WhatsApp/call buttons.
-Services, gallery and reviews load from the database (built-in defaults show if the server is offline).
+## 🌐 Live Demo
+- **Frontend (Vercel):** [LIVE_LINK](https://beauty-salon-black-eight.vercel.app)
+- **Backend (Railway):** [BACKEND_LINK](https://beauty-salon-production-c26e.up.railway.app)
 
-**Booking:** 30-minute slots from 10:00 to 19:30, past times hidden, taken slots disabled, double booking blocked (also at database level). Optional email for a confirmation message.
+## ✨ Features
+- Responsive landing page: services, about, gallery with lightbox, reviews, contact map, WhatsApp and click-to-call buttons
+- Booking form with live 30-minute slots, past times hidden, double booking blocked
+- Admin dashboard (`/admin`) with JWT login:
+  - Manage bookings: filter, search, confirm or cancel, WhatsApp the client
+  - Manage services, gallery photos and reviews (image upload optional)
+  - Change password
+- Optional email notifications (owner and customer)
+- Security: helmet, rate limiting, bcrypt, input validation
 
-**Admin (`/admin`):** appointments with Today/Upcoming/Pending views, search, status changes, WhatsApp/call buttons, card layout on phones; manage services, gallery photos and reviews (with image upload); change password.
+## 🛠 Tech Stack
+**Frontend:** React, Vite, Tailwind CSS, Framer Motion, React Router  
+**Backend:** Node.js, Express, Mongoose, JWT  
+**Database:** MongoDB Atlas  
+**Optional:** Nodemailer (email), Cloudinary (uploads)
 
-**Security:** helmet, rate limits (login, booking, general), JWT auth, input validation.
+## 🚀 Run Locally
+Requires Node.js 18+ and a free [MongoDB Atlas](https://www.mongodb.com/atlas) database.
 
-**Notifications (optional):** email to the owner on each new booking, and to the client when an email is given and when the booking is confirmed or cancelled.
-
-## Run locally
-Node.js 18+ and a free MongoDB Atlas database are required.
-
+```bash
+git clone https://github.com/zunaira-naseem-code199/beauty-salon.git
+cd beauty-salon
 ```
-# terminal 1: backend
-cd server
-copy .env.example .env      # Mac/Linux: cp .env.example .env
-# fill in .env (see below)
-npm install
-npm run seed                # admin user (if missing), services, gallery, reviews
-npm run dev                 # http://localhost:5000
 
-# terminal 2: frontend
+**Backend**
+```bash
+cd server
+cp .env.example .env     # Windows: copy .env.example .env
+# edit .env (see below)
+npm install
+npm run seed             # creates admin, services, gallery, reviews
+npm run dev              # http://localhost:5000
+```
+
+**Frontend** (new terminal)
+```bash
 cd client
 npm install
-npm run dev                 # http://localhost:5173
+npm run dev              # http://localhost:5173
 ```
-Admin: http://localhost:5173/admin. Reset the admin password from `.env` with `npm run seed -- --reset-admin`.
 
-## .env
-Required: `MONGODB_URI`, `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`. `TIMEZONE` defaults to `Asia/Karachi`.
+Admin dashboard: `http://localhost:5173/admin` (login with `ADMIN_EMAIL` and `ADMIN_PASSWORD` from `.env`).
 
-**Email (optional).** For Gmail: turn on 2-Step Verification, create an App Password at myaccount.google.com/apppasswords, then set `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=587`, `SMTP_USER=<your gmail>`, `SMTP_PASS=<app password>`, `MAIL_FROM`, and `OWNER_EMAIL` (where new-booking alerts go). Leave blank to disable.
+## 🔑 Environment Variables (`server/.env`)
+| Variable | Description |
+| --- | --- |
+| `MONGODB_URI` | Atlas connection string (include the database name before `?`) |
+| `JWT_SECRET` | Long random string for signing login tokens |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Admin account created by `npm run seed` |
+| `CLIENT_URL` | Frontend URL (default `http://localhost:5173`) |
+| `SMTP_*`, `OWNER_EMAIL`, `MAIL_FROM` | Optional email notifications |
+| `CLOUDINARY_*` | Optional image uploads |
 
-**Image upload (optional).** Create a free Cloudinary account, open the dashboard, and copy the cloud name, API key and API secret into `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`. Without them, paste image URLs in the admin forms instead.
+Production frontend only: `VITE_API_URL` = your backend URL ending in `/api`.
 
-## API
-| Method | Route | Access |
-| --- | --- | --- |
-| POST | /api/auth/login | public |
-| POST | /api/auth/change-password | admin |
-| GET | /api/services, /api/gallery, /api/reviews | public (active only) |
-| GET | /api/{services,gallery,reviews}/all | admin |
-| POST/PUT/DELETE | /api/{services,gallery,reviews}[/:id] | admin |
-| GET | /api/appointments/slots?date=YYYY-MM-DD | public |
-| POST | /api/appointments | public |
-| GET/PATCH/DELETE | /api/appointments[/:id] | admin |
-| POST | /api/uploads | admin |
+> If Atlas gives a DNS error (`queryTxt ETIMEOUT`), use the **Legacy URI String** option in Atlas > Connect.
 
-## Deploying
-Set `NODE_ENV=production`, a new strong `JWT_SECRET`, `CLIENT_URL` (your site URL) on the server, and `VITE_API_URL` (your API URL ending in `/api`) when building the client.
+## ☁️ Deployment
+- **Backend (Railway):** root directory `server`, start command `npm start`. Add the `.env` values as variables, plus `NODE_ENV=production` and `CLIENT_URL` set to the Vercel URL.
+- **Frontend (Vercel):** root directory `client`, framework Vite. Add `VITE_API_URL` and a `vercel.json` rewrite so `/admin` works on refresh.
+
+## 📁 Structure
+```
+client/   React app (components, pages, admin, lib/config.js)
+server/   Express API (models, routes, middleware, seed.js)
+```
+Business details (phone, address, map) are in `client/src/lib/config.js`.
+
+## 👩‍💻 Author
+[zunaira-naseem-code199](https://github.com/zunaira-naseem-code199)
